@@ -1,0 +1,46 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : 作用为了分类管理映射文件中的 Mapperdstatement 对象 -->
+<mapper namespace="com.zzu.ssm.mapper.UserMapper">
+
+    <!-- id : Mapperdstatement 唯一 标识-->
+	<select id="findUserById" parameterType="int" resultType="com.zzu.ssm.po.User">
+		select * from user where id=#{id}
+	</select>
+
+
+    <select id="findUserByUsername" parameterType="java.lang.String" 
+			resultType="com.zzu.ssm.po.User">
+	   select * from user where username like '%${value}%' 
+	</select>
+
+   <!-- 添加用户 -->
+	<insert id="insertUser" parameterType="com.zzu.ssm.po.User">
+	  insert into user(username,birthday,sex,address) 
+	  values(#{username},#{birthday},#{sex},#{address})
+	</insert>
+   
+   
+   <insert id="insertUserReturnKey" parameterType="com.zzu.ssm.po.User">
+	   insert into user(username,birthday,sex,address)
+	    values(#{username},#{birthday},#{sex},#{address});
+	    <!-- selectKey将主键返回，需要再返回 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+   
+   <!-- 删除用户 -->
+	<delete id="deleteUserById" parameterType="int">
+		delete from user where id=#{id}
+	</delete>
+   
+   <update id="updateUser" parameterType="com.zzu.ssm.po.User">
+		update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address}
+		where id=#{id}
+   </update>
+   
+
+
+</mapper>

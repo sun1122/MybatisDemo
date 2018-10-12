@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+
+	<!-- 如果属性在不只一个地方进行了配置，那么 MyBatis 将按照下面的顺序来加载： •在 properties 元素体内指定的属性首先被读取。 
+		•然后根据 properties 元素中的 resource 属性读取类路径下属性文件或根据 url 属性指定的路径读取属性文件，并覆盖已读取的同名属性。 
+		•最后读取作为方法参数传递的属性，并覆盖已读取的同名属性。 因此，通过方法参数传递的属性具有最高优先级，resource/url 属性中指定的配置文件次之，最低优先级的是 
+		properties 属性中指定的属性。 -->
+
+	<properties resource="dbconfig.properties"></properties>
+
+	<settings>
+
+		<setting name="logImpl" value="LOG4J" />
+
+	</settings>
+	<typeAliases>
+		<!-- <typeAlias alias="User" type="com.zzu.ssm.po.User" /> -->
+		<!-- 每一个在包 中的 Java Bean，在没有注解的情况下，会使用 Bean 的首字母小写的非限定类名来作为它的别名。 比如 domain.blog.Author 
+			的别名为 author；若有注解，则别名为其注解值。 ****首字母大写或小写都可以 -->
+		<package name="com.zzu.ssm.po" />
+	</typeAliases>
+
+	<!-- POOLED– 这种数据源的实现利用“池”的概念将 JDBC 连接对象组织起来， 避免了创建新的连接实例时所必需的初始化和认证时间。 
+		这是一种使得并发 Web 应用快速响应请求的流行处理方式。 •JDBC – 这个配置就是直接使用了 JDBC 的提交和回滚设置，它依赖于从数据源得到的连接来管理事务作用域。 -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driver}" />
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+<!-- 		<mapper resource="mapper/UserMapper.xml" /> -->
+
+		<!-- <mapper resource="UserMapper.xml" /> -->
+		<!-- 要求mapper接口名称和mapper映射文件名称相同，且放在同一个目录中 -->
+		<!-- <mapper class="com.zzu.ssm.mapper.UserMapper"/> -->
+		<!-- 批量加载 -->
+		<package name="com.zzu.ssm.mapper"/>
+		<!-- resources 和src目录 一样时，，， 编译时会放在一起 工具看起来分开 war包里是在一起的 -->
+	</mappers>
+</configuration>

@@ -1,0 +1,68 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : 作用为了分类管理映射文件中的 Mapperdstatement 对象 -->
+<mapper namespace="com.zzu.ssm.mapper.UserMapper">
+
+    <!-- id : Mapperdstatement 唯一 标识-->
+	<select id="findUserById" parameterType="int" resultType="user">
+		select * from user where id=#{id}
+	</select>
+
+
+    <select id="findUserByUsername" parameterType="java.lang.String" 
+			resultType="com.zzu.ssm.po.User">
+	   select * from user where username like '%${value}%' 
+	</select>
+
+   <!-- 添加用户 -->
+	<insert id="insertUser" parameterType="user">
+	  insert into user(username,birthday,sex,address) 
+	  values(#{username},#{birthday},#{sex},#{address})
+	</insert>
+   
+   
+   <insert id="insertUserReturnKey" parameterType="user">
+	   insert into user(username,birthday,sex,address)
+	    values(#{username},#{birthday},#{sex},#{address});
+	    <!-- selectKey将主键返回，需要再返回 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+   
+   <!-- 删除用户 -->
+	<delete id="deleteUserById" parameterType="int">
+		delete from user where id=#{id}
+	</delete>
+   
+   <update id="updateUser" parameterType="com.zzu.ssm.po.User">
+		update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address}
+		where id=#{id}
+   </update>
+   
+
+   <!-- 定义resultMap：将查询的列名和映射的pojo的属性名做一个对应关系 -->
+	<!-- 
+		type：指定查询结果要映射的pojo的类型
+		id：指定resultMap的唯一标示
+	 -->
+	<resultMap type="user" id="userListResultMap">
+		<!-- 
+		id标签：映射查询结果的唯一列（主键列）
+			column：查询sql的列名
+			property：映射结果的属性名
+		-->
+		<id column="id_" property="id"/>
+		<!-- result标签：映射查询结果的普通列 -->
+		<result column="username_" property="username"/>
+		<result column="birthday_" property="birthday"/>
+	</resultMap>
+
+	<!-- resultMap入门 -->
+	<select id="findUserListResultMap" resultMap="userListResultMap">
+		SELECT id id_,username username_,birthday birthday_ FROM user
+	</select>
+
+
+</mapper>
