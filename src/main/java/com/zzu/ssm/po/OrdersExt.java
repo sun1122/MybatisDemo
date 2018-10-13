@@ -7,6 +7,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 public class OrdersExt extends Orders {
 	
-	private String username;
-    private String address;
+
+	private static final long serialVersionUID = -2698531674181924541L;
+//	private String username;
+//    private String address;
+    private User user;
 }

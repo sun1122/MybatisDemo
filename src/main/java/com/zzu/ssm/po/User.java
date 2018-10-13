@@ -2,6 +2,7 @@ package com.zzu.ssm.po;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +24,5 @@ public class User implements Serializable{
 	private Date birthday;
 	private String sex;
 	private String address;
+	private List<Orders> orders;
 }
