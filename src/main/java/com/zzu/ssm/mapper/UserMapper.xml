@@ -65,4 +65,83 @@
 	</select>
 
 
+    <!-- 查询所有订单信息 -->
+	<select id="findOrdersList" resultType="com.zzu.ssm.po.OrdersExt">
+	SELECT
+	orders.*,
+	user.username,
+	user.address
+	FROM
+	orders,	user
+	WHERE orders.user_id = user.id 
+	</select>
+
+
+
+   <!-- 查询订单关联用户信息使用resultmap -->
+	<resultMap type="OrdersExt" id="ordersAndUserRstMap">
+		<id column="id" property="id"/>
+		<result column="user_id" property="userid"/>
+		<result column="number" property="number"/>
+		<result column="createtime" property="createtime"/>
+		<result column="note" property="note"/>
+		<!-- 一对一关联映射 -->
+		<!-- 
+		property:Orders对象的user属性
+		javaType：user属性对应 的类型
+		 -->
+		<association property="user" javaType="User">
+			<!-- column:user表的主键对应的列  property：user对象中id属性-->
+			<id column="user_id" property="id"/>
+			<result column="username" property="username"/>
+			<result column="address" property="address"/>
+		</association>
+	</resultMap>
+   
+
+    <select id="findOrdersAndUserRstMap" resultMap="ordersAndUserRstMap">
+		SELECT
+			o.id,
+			o.user_id,
+			o.number,
+			o.createtime,
+			o.note,
+			u.username,
+			u.address
+		FROM
+			orders o
+		JOIN user u ON u.id = o.user_id
+	</select>
+    
+    
+    
+    <select id="findOrdersByUserId" parameterType="int" resultType="orders">
+		select * from orders  where user_id=#{id}
+	</select>
+	
+    <resultMap type="user" id="userAndOrderRstMap">
+		<!-- 用户信息映射 -->
+		<id property="id" column="id"/>
+		<result property="username" column="username"/>
+		<result property="birthday" column="birthday"/>
+		<result property="sex" column="sex"/>
+		<result property="address" column="address"/>
+		<!-- 一对多关联映射 -->
+		<collection property="orders" ofType="orders" column="id" fetchType="lazy" select="com.zzu.ssm.mapper.UserMapper.findOrdersByUserId">
+			<id property="id" column="id"/>	
+			<result property="userid" column="user_id"/>
+			<result property="number" column="number"/>
+			<result property="createtime" column="createtime"/>
+			<result property="note" column="note"/>
+		</collection>
+	</resultMap>
+	<!-- 主查询信息 用户信息 -->
+	<select id="findUserAndOrderRstMap" parameterType="int" resultMap="userAndOrderRstMap">
+		SELECT
+		u.*
+		FROM
+		user u where id=#{id}
+	</select>
+    
+
 </mapper>
